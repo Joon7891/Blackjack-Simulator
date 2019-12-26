@@ -1,5 +1,6 @@
-from enum import Enum
+import pygame
 import random
+from enum import Enum
 
 class Suit(Enum):
     Clubs = 0
@@ -23,23 +24,38 @@ class Rank(Enum):
     King = 13
 
 class Card(object):
-    def __init__(self, suit, rank):
+    cards = {}
+
+    @staticmethod
+    def load():
+        file_path = 'Content/Images/Sprites/Cards/'
+
+        # Loading card images into a static class dictionary
+        for suit in Suit:
+            suit_cards = {}
+            for i in range(1, 14):
+                suit_cards[Rank(i)] = pygame.image.load(f"{file_path}{suit.name}{i}.png")
+
+            Card.cards[suit] = suit_cards
+
+    def __init__(self, suit, rank, x, y):
         self.suit = suit
         self.rank = rank
-        self.image =
+        self.x, self.y = x, y
+        self.image = Card.cards[suit][rank]
 
-    def draw(self):
+    def draw(self, screen):
         pass
 
 class Deck(object):
-    def __init__(self):
+    def __init__(self, x, y):
         self.deck = []
 
         for i in range(4):
             for j in range(1, 14):
-                self.deck.append(Card(Suit(i), Rank(j)))
+                self.deck.append(Card(Suit(i), Rank(j), x, y))
 
         random.shuffle(self.deck)
 
-    def draw_card(self):
+    def get_card(self):
         return self.deck.pop()

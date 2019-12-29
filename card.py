@@ -1,4 +1,4 @@
-import pygame
+from pygame import *
 import random
 from enum import Enum
 
@@ -25,6 +25,8 @@ class Rank(Enum):
 
 class Card(object):
     cards = {}
+    width = 25
+    height = 35
 
     @staticmethod
     def load():
@@ -34,9 +36,12 @@ class Card(object):
         for suit in Suit:
             suit_cards = {}
             for i in range(1, 14):
-                suit_cards[Rank(i)] = pygame.image.load(f"{file_path}{suit.name}{i}.png")
+                suit_cards[Rank(i)] = transform.scale(image.load(f"{file_path}{suit.name}{i}.png"),
+                                                      (Card.width, Card.height))
 
             Card.cards[suit] = suit_cards
+
+        print("Loaded Cards")
 
     def __init__(self, suit, rank, x, y):
         self.suit = suit

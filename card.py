@@ -38,10 +38,7 @@ class Card(object):
             for i in range(1, 14):
                 suit_cards[Rank(i)] = transform.scale(image.load(f"{file_path}{suit.name}{i}.png"),
                                                       (Card.width, Card.height))
-
             Card.cards[suit] = suit_cards
-
-        print("Loaded Cards")
 
     def __init__(self, suit, rank, x, y):
         self.suit = suit

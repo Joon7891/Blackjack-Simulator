@@ -1,6 +1,6 @@
+from enum import Enum
 from pygame import *
 import random
-from enum import Enum
 
 class Suit(Enum):
     Clubs = 0
@@ -33,6 +33,8 @@ class Card(object):
         file_path = 'Content/Images/Sprites/Cards/'
 
         # Loading card images into a static class dictionary
+        Card.back_image = transform.scale(image.load(f"{file_path}cardBack.png"),
+                                                    (Card.width, Card.height))
         for suit in Suit:
             suit_cards = {}
             for i in range(1, 14):
@@ -40,14 +42,15 @@ class Card(object):
                                                       (Card.width, Card.height))
             Card.cards[suit] = suit_cards
 
-    def __init__(self, suit, rank, x, y):
+    def __init__(self, suit, rank, x, y, reveal=False):
         self.suit = suit
         self.rank = rank
         self.x, self.y = x, y
         self.image = Card.cards[suit][rank]
+        self.reveal = reveal
 
-    def draw(self, screen):
-        pass
+    def draw(self, window):
+        window.blit(self.image if self.reveal else Card.back_image, (self.x, self.y))
 
 class Deck(object):
     def __init__(self, x, y):

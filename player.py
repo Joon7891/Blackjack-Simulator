@@ -7,7 +7,6 @@ class Player(object):
         for card in self.cards:
             pass
 
-
 class User (Player):
     def __init__(self):
         self.balance = 500

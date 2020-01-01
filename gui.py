@@ -5,11 +5,15 @@ class Button(object):
         self.x, self.y = x, y
         self.width = width
         self.height = height
-        self.image = image
+        self.image = pygame.transform.scale(image, (width, height))
         self.func = func
 
     def update(self):
-        pass
+        mouse_x, mouse_y = pygame.mouse.get_pos()
 
-    def draw(self):
-        pass
+        if pygame.mouse.get_pressed()[0] and self.x <= mouse_x <= self.x + self.width \
+                and self.y <= mouse_y <= self.y + self.height:
+            func()
+
+    def draw(self, window):
+        window.blit(image, (self.x, self.y))

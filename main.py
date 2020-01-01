@@ -1,39 +1,46 @@
+from shared_data import window_width, window_height, ScreenMode
 from enum import Enum
+import shared_data
 import main_menu
 import game_screen
 import settings_screen
 import pygame
 import card
 
-# Enumerable for screen modes
-class ScreenMode(Enum):
-    MainMenu = 1
-    Game = 2
-    Settings = 3
-
 class Game(object):
-    window_width = 600
-    window_height = 480
-
     def __init__(self):
+        # Initializing basic PyGame components
         pygame.init()
-        self.screen_mode = ScreenMode.MainMenu
-        self.window = pygame.display.set_mode((Game.window_width, Game.window_height))
+        self.window = pygame.display.set_mode((window_width, window_height))
         pygame.display.set_caption("Blackjack Simulator")
         pygame.display.set_icon(pygame.image.load("Content/Images/Icon.jpg"))
 
+        # Loading and setting up background music
         music = pygame.mixer.music.load("Content/Audio/Music/Memoir_Of_Summer.mp3")
         pygame.mixer.music.play(-1)
 
-    def on_init(self):
+        # Setting up various helper classes
         card.Card.load()
+        self.main_menu = main_menu.MainMenu()
+        self.game_screen = game_screen.GameScreen()
+        self.settings_screen = settings_screen.SettingsScreen()
 
     def on_loop(self):
-        pass
+        # Clearing display
+        self.window.fill((0, 0, 0))
+
+        # Calling appropriate screen loop
+        if shared_data.screen_mode == ScreenMode.MainMenu:
+            self.main_menu.on_loop(self.window)
+        elif shared_data.screen_mode == ScreenMode.Game:
+            self.game_screen.on_loop(self.window)
+        else:
+            self.game_screen.on_loop(self.window)
+
+        # Updating display window
+        pygame.display.update()
 
     def on_run(self):
-        self.on_init()
-
         running = True
         while running:
             for event in pygame.event.get():

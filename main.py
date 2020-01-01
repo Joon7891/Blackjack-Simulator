@@ -6,6 +6,7 @@ import game_screen
 import settings_screen
 import pygame
 import card
+import gui
 
 class Game(object):
     def __init__(self):
@@ -21,6 +22,7 @@ class Game(object):
 
         # Setting up various helper classes
         card.Card.load()
+        gui.Button.load()
         self.main_menu = main_menu.MainMenu()
         self.game_screen = game_screen.GameScreen()
         self.settings_screen = settings_screen.SettingsScreen()
@@ -35,7 +37,7 @@ class Game(object):
         elif shared_data.screen_mode == ScreenMode.Game:
             self.game_screen.on_loop(self.window)
         else:
-            self.game_screen.on_loop(self.window)
+            self.settings_screen.on_loop(self.window)
 
         # Updating display window
         pygame.display.update()

@@ -1,4 +1,6 @@
+from shared_data import ScreenMode
 from colour import get_rgb
+import shared_data
 import pygame
 
 class Text(object):
@@ -12,19 +14,37 @@ class Text(object):
         window.blit(self.text_surface, self.destination)
 
 class Button(object):
-    def __init__(self, x, y, width, height, image, func):
+    @staticmethod
+    def load():
+        Button.click_sound = pygame.mixer.Sound("Content/Audio/SoundEffects/buttonClick.wav")
+
+    @staticmethod
+    def set_main_menu():
+        shared_data.screen_mode = ScreenMode.MainMenu
+
+    @staticmethod
+    def set_game_screen():
+        shared_data.screen_mode = ScreenMode.Game
+
+    @staticmethod
+    def set_settings_screen():
+        shared_data.screen_mode = ScreenMode.Settings
+
+    def __init__(self, x, y, width, height, image, action):
         self.x, self.y = x, y
         self.width = width
         self.height = height
         self.image = pygame.transform.scale(image, (width, height))
-        self.func = func
+        self.action = action
 
     def update(self):
         mouse_x, mouse_y = pygame.mouse.get_pos()
 
+        # Playing button sound effect and initiating action
         if pygame.mouse.get_pressed()[0] and self.x <= mouse_x <= self.x + self.width \
                 and self.y <= mouse_y <= self.y + self.height:
-            func()
+            Button.click_sound.play()
+            self.action()
 
     def draw(self, window):
-        window.blit(image, (self.x, self.y))
+        window.blit(self.image, (self.x, self.y))
